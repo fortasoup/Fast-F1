@@ -24,9 +24,9 @@ fastf1.plotting.setup_mpl(color_scheme="fastf1")
 # Define the session parameters. We compare the Qualifying sessions
 # of the Chinese Grand Prix.
 
-year_old = 2025
+year_old = 2020
 year_new = 2026
-track = "China"
+track = "Silverstone"
 session_type = "Q"
 
 ##############################################################################
@@ -43,6 +43,7 @@ session_new.load()
 # we must interpolate them onto a common distance axis to calculate
 # a mathematical average.
 
+nr_drivers = 1
 
 def get_average_speed(
     session: fastf1.core.Session, distance_array: np.ndarray
@@ -60,7 +61,7 @@ def get_average_speed(
         speeds corresponding to each point in the distance_array.
     """
     speeds = []
-    top_10_drivers = session.results["Abbreviation"][:10]
+    top_10_drivers = session.results["Abbreviation"][:nr_drivers]
 
     for driver in top_10_drivers:
         lap = session.laps.pick_drivers(driver).pick_fastest()
@@ -71,7 +72,7 @@ def get_average_speed(
         tel = lap.get_telemetry().add_distance()
 
         # Crop telemetry to the back straight area (Shanghai)
-        mask = (tel["Distance"] >= 3700) & (tel["Distance"] <= 4800)
+        mask = (tel["Distance"] >= 0) & (tel["Distance"] <= circuit_lenght)
         tel_straight = tel[mask]
 
         interp_speed = np.interp(
@@ -84,9 +85,11 @@ def get_average_speed(
 
 ##############################################################################
 # Calculate the average speed traces for both years using a
-# common distance grid.
+# common distcircuit_length = session_new.laps.pick_fastest().get_telemetry().add_distance()["Distance"].max()ance grid.
 
-common_distance = np.linspace(3800, 4750, 500)
+circuit_lenght = session_new.laps.pick_fastest().get_telemetry().add_distance()["Distance"].max()
+
+common_distance = np.linspace(0, circuit_lenght, 500)
 avg_speed_old = get_average_speed(session_old, common_distance)
 avg_speed_new = get_average_speed(session_new, common_distance)
 
@@ -99,14 +102,14 @@ fig, ax = plt.subplots(figsize=(10, 6))
 ax.plot(
     common_distance,
     avg_speed_old,
-    label=f"{year_old} (Top 10 Avg - DRS Era)",
+    label=f"{year_old} (Top {nr_drivers} Avg)",
     color="grey",
     linestyle="--",
 )
 ax.plot(
     common_distance,
     avg_speed_new,
-    label=f"{year_new} (Top 10 Avg - Current)",
+    label=f"{year_new} (Top {nr_drivers} Avg)",
     color="red",
     linewidth=2.5,
 )
@@ -118,12 +121,12 @@ ax.fill_between(
     where=(avg_speed_old > avg_speed_new),
     color="red",
     alpha=0.2,
-    label="Speed Loss (Clipping)",
+    label="Speed Loss",
 )
 
 ax.set_title(
-    f"Grid Average Speed Trace: Shanghai Back Straight\n"
-    f"({year_old} vs {year_new}) - Top 10 Qualifiers"
+    f"Grid Average Speed Trace: {track} circuit\n"
+    f"({year_old} vs {year_new}) - Top {nr_drivers} Qualifiers"
 )
 ax.set_xlabel("Distance (m)")
 ax.set_ylabel("Speed (km/h)")
