@@ -18,8 +18,8 @@ from fastf1.ergast import Ergast
 # We want to know who can theoretically still win the drivers' championship
 # after the first 12 races.
 
-SEASON = 2025
-ROUND = 12
+SEASON = 2026
+ROUND = 16
 
 
 ##############################################################################
