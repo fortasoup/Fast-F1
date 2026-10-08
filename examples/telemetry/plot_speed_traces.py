@@ -29,29 +29,6 @@ for i in range(int(input("How many drivers do you want to compare? "))):
     # Plot the speed trace
     plt.plot(telemetry['Distance'], telemetry['Speed'], color=color, label=driver_name)
 
-##############################################################################
-# First, we select the two laps that we want to compare
-
-# ver_lap = session.laps.pick_drivers("VER").pick_fastest()
-# ham_lap = session.laps.pick_drivers("HAM").pick_fastest()
-
-# ##############################################################################
-# # Next we get the telemetry data for each lap. We also add a 'Distance' column
-# # to the telemetry dataframe as this makes it easier to compare the laps.
-
-# ver_tel = ver_lap.get_car_data().add_distance()
-# ham_tel = ham_lap.get_car_data().add_distance()
-
-# ##############################################################################
-# # Finally, we create a plot and plot both speed traces.
-# # We color the individual lines with the driver's team colors.
-
-# rbr_color = fastf1.plotting.get_team_color(ver_lap["Team"], session=session)
-# mer_color = fastf1.plotting.get_team_color(ham_lap["Team"], session=session)
-
-# fig, ax = plt.subplots()
-# ax.plot(ver_tel["Distance"], ver_tel["Speed"], color=rbr_color, label="VER")
-# ax.plot(ham_tel["Distance"], ham_tel["Speed"], color=mer_color, label="HAM")
 
 ax.set_xlabel("Distance in m")
 ax.set_ylabel("Speed in km/h")
