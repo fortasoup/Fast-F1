@@ -23,20 +23,21 @@ race = fastf1.get_session(2023, "Azerbaijan", "R")
 race.load()
 
 ###############################################################################
-# Get all the laps for a single driver.
+# Get all the laps for any drivers.
 # Filter out slow laps as they distort the graph axis.
-
-driver_laps = race.laps.pick_drivers("ALO").pick_quicklaps().reset_index()
 
 ###############################################################################
 # Make the scattterplot using lap number as x-axis and lap time as y-axis.
 # Marker colors correspond to the compounds used.
 # Note: as LapTime is represented by timedelta, calling setup_mpl earlier
 # is required.
+# sphinx_gallery_defer_figures
 
-fig, ax = plt.subplots(figsize=(8, 8))
-
-sns.scatterplot(data=driver_laps,
+for i in range(int(input("How many drivers do you want to compare? "))):
+    driver_name = input("Enter the driver's abbreviation (e.g., VER, HAM): ")
+    driver_laps = race.laps.pick_drivers(driver_name).pick_quicklaps().reset_index()
+    fig, ax = plt.subplots(figsize=(8, 8))
+    sns.scatterplot(data=driver_laps,
                 x="LapNumber",
                 y="LapTime",
                 ax=ax,
@@ -45,7 +46,6 @@ sns.scatterplot(data=driver_laps,
                 s=80,
                 linewidth=0,
                 legend="auto")
-# sphinx_gallery_defer_figures
 
 ###############################################################################
 # Make the plot more aesthetic.
