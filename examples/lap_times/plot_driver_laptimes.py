@@ -32,18 +32,27 @@ race.load()
 # Note: as LapTime is represented by timedelta, calling setup_mpl earlier
 # is required.
 # sphinx_gallery_defer_figures
+fig, ax = plt.subplots(figsize=(0.6 * 16, 0.6 * 9))
 
 for i in range(int(input("How many drivers do you want to compare? "))):
     driver_name = input("Enter the driver's abbreviation (e.g., VER, HAM): ")
-    driver_laps = race.laps.pick_drivers(driver_name).pick_quicklaps().reset_index()
-    fig, ax = plt.subplots(figsize=(8, 8))
+    driver_laps = race.laps.pick_drivers(driver_name).reset_index()    
+    sns.lineplot(data=driver_laps,
+                 x="LapNumber",
+                 y="LapTime",
+                 ax=ax,
+                 hue="Compound",
+                 palette=fastf1.plotting.get_compound_mapping(session=race),
+                 units="Stint",
+                 estimator=None,
+                 linewidth=1.5,
+                 legend=False)
     sns.scatterplot(data=driver_laps,
                 x="LapNumber",
                 y="LapTime",
                 ax=ax,
-                hue="Compound",
-                palette=fastf1.plotting.get_compound_mapping(session=race),
-                s=80,
+                color = fastf1.plotting.get_team_color(driver_laps["Team"].iloc[0], session=race),
+                s=20,
                 linewidth=0,
                 legend="auto")
 
@@ -55,7 +64,7 @@ ax.set_ylabel("Lap Time")
 # The y-axis increases from bottom to top by default
 # Since we are plotting time, it makes sense to invert the axis
 ax.invert_yaxis()
-plt.suptitle(f"{driver_name.upper()} Laptimes in the {str(race.date)[0:4]} {race.name} Grand Prix")
+plt.suptitle(f"{driver_name.upper()} Laptimes in the {race.event.year} {race.event['EventName']}")
 
 # Turn on major grid lines
 plt.grid(color="w", which="major", axis="both")
