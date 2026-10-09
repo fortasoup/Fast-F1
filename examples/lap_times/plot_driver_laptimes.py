@@ -44,7 +44,7 @@ for i in range(int(input("How many drivers do you want to compare? "))):
                 hue="Compound",
                 palette=fastf1.plotting.get_compound_mapping(session=race),
                 s=80,
-                linewidth=0,
+                linewidth=1,
                 legend="auto")
 
 ###############################################################################
