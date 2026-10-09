@@ -27,7 +27,7 @@ for i in range(int(input("How many drivers do you want to compare? "))):
     color = fastf1.plotting.get_team_color(lap["Team"], session=session)
 
     # Plot the speed trace
-    plt.plot(telemetry['Distance'], telemetry['Speed'], color=color, label=driver_name)
+    plt.plot(telemetry['Distance'], telemetry['Speed'], color=color, label=driver_name.upper())
 
 
 ax.set_xlabel("Distance in m")
