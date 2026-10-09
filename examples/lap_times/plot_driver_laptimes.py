@@ -44,7 +44,7 @@ for i in range(int(input("How many drivers do you want to compare? "))):
                 hue="Compound",
                 palette=fastf1.plotting.get_compound_mapping(session=race),
                 s=80,
-                linewidth=1,
+                linewidth=0,
                 legend="auto")
 
 ###############################################################################
@@ -55,7 +55,7 @@ ax.set_ylabel("Lap Time")
 # The y-axis increases from bottom to top by default
 # Since we are plotting time, it makes sense to invert the axis
 ax.invert_yaxis()
-plt.suptitle("Alonso Laptimes in the 2023 Azerbaijan Grand Prix")
+plt.suptitle(f"{driver_name} Laptimes in the {race.year} {race.name} Grand Prix")
 
 # Turn on major grid lines
 plt.grid(color="w", which="major", axis="both")
