@@ -19,7 +19,7 @@ fastf1.plotting.setup_mpl(mpl_timedelta_support=True, color_scheme="fastf1")
 ###############################################################################
 # Load the race session.
 
-race = fastf1.get_session(2023, "Azerbaijan", "R")
+race = fastf1.get_session(2023, "Monaco", "R")
 race.load()
 
 ###############################################################################
@@ -55,7 +55,7 @@ ax.set_ylabel("Lap Time")
 # The y-axis increases from bottom to top by default
 # Since we are plotting time, it makes sense to invert the axis
 ax.invert_yaxis()
-plt.suptitle(f"{driver_name} Laptimes in the {race.year} {race.name} Grand Prix")
+plt.suptitle(f"{driver_name.upper()} Laptimes in the {str(race.date)[0:4]} {race.name} Grand Prix")
 
 # Turn on major grid lines
 plt.grid(color="w", which="major", axis="both")
