@@ -19,7 +19,7 @@ fastf1.plotting.setup_mpl(mpl_timedelta_support=True, color_scheme="fastf1")
 ###############################################################################
 # Load the race session.
 
-race = fastf1.get_session(2023, "Monaco", "R")
+race = fastf1.get_session(2022, "australia", "R")
 race.load()
 
 ###############################################################################
@@ -36,25 +36,55 @@ fig, ax = plt.subplots(figsize=(0.6 * 16, 0.6 * 9))
 
 for i in range(int(input("How many drivers do you want to compare? "))):
     driver_name = input("Enter the driver's abbreviation (e.g., VER, HAM): ")
-    driver_laps = race.laps.pick_drivers(driver_name).reset_index()    
+    driver_laps = race.laps.pick_drivers(driver_name).reset_index()
     sns.lineplot(data=driver_laps,
-                 x="LapNumber",
-                 y="LapTime",
-                 ax=ax,
-                 hue="Compound",
-                 palette=fastf1.plotting.get_compound_mapping(session=race),
-                 units="Stint",
-                 estimator=None,
-                 linewidth=1.5,
-                 legend=False)
-    sns.scatterplot(data=driver_laps,
                 x="LapNumber",
                 y="LapTime",
                 ax=ax,
                 color = fastf1.plotting.get_team_color(driver_laps["Team"].iloc[0], session=race),
-                s=20,
+                linewidth=1.5,
+                legend=False)
+    sns.scatterplot(data=driver_laps,
+                x="LapNumber",
+                y="LapTime",
+                ax=ax,
+                hue="Compound",
+                palette=fastf1.plotting.get_compound_mapping(session=race),
+                s=30,
                 linewidth=0,
                 legend="auto")
+    pit_stops = driver_laps[driver_laps['PitInTime'].notna()]
+
+    if not pit_stops.empty:
+        sns.scatterplot(
+            data=pit_stops,
+            x="LapNumber",
+            y="LapTime",
+            ax=ax,
+            marker="o",
+            facecolor="none",
+            edgecolor="white",
+            linewidth=1.5,
+            s=30,
+            zorder=6,
+            legend=False
+        )
+
+    safety_car_laps = driver_laps[driver_laps['TrackStatus'].astype(str).str.contains('4|6')]
+    if not safety_car_laps.empty:
+        sns.scatterplot(
+            data=safety_car_laps,
+            x="LapNumber",
+            y="LapTime",
+            ax=ax,
+            hue="Compound",
+            marker="X",
+            edgecolor="yellow",
+            linewidth=0,
+            s=50,
+            zorder=6,
+            legend=False
+        )
 
 ###############################################################################
 # Make the plot more aesthetic.
